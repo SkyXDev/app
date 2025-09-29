@@ -13,8 +13,7 @@ export const Hero = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleEnded = () => {
-    setCurrentVidIndex((prev) => (prev + 1) % videos.length); // cycle
-    console.log("video change")
+    setCurrentVidIndex((prev) => (prev + 1) % videos.length); 
   };
 
   useEffect(() => {
