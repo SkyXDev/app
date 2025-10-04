@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "./ui/button";
 import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 export const Hero = () => {
   const videos = [
@@ -47,6 +49,15 @@ export const Hero = () => {
         <h1 className="font-light text-7xl">智慧角落</h1>
         <p className="opacity-0">artificial margin</p>
         <h3 className="font-light text-2xl">鳥兔玉到去位拉每，左弓說有丁</h3>
+        <p className="opacity-0">artificial margin</p>
+        <div className="flex gap-2 opacity-100 justify-around align-middle">
+          <Button asChild variant="default" className="bg-black w-20 h-12 flex justify-center items-center">
+            <Link href="/auth" className="text-xl">登入</Link>
+          </Button>
+          <Button asChild variant="outline" className="w-22 h-12 flex justify-center items-center">
+            <Link href="/auth" className="text-xl">閱讀貼文</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );
