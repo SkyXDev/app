@@ -11,6 +11,7 @@ export const Hero = () => {
     "https://uemrhhfhsztcbcrqvdjd.supabase.co/storage/v1/object/public/hero-videos/6929265-hd_1920_1080_30fps.mp4",
   ];
 
+  
   const [currentVidIndex, setCurrentVidIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
