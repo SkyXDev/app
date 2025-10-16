@@ -1,53 +1,9 @@
 "use client";
-/*
-import React, { useState } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react"; 
-
-
-export const Navbar = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  return (
-    <nav>
-      <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-md text-white z-50">
-		<div className="max-w-6xl mx-auto flex justify-around items-center h-16 px-6">
-			<div className="opacity-0 flex-1">spacing</div>
-			<Link href="/" className="text-xl w-32 flex-none">
-				智慧角落
-			</Link>
-			<div className="opacity-0 flex-4">spacing</div>
-			<div className="hidden md:flex">
-				<Link href="/" className="text-xl w-32 flex-none">
-					部落格
-				</Link>
-				<Link href="/" className="text-xl w-32 flex-none">
-					論壇
-				</Link>
-			</div>
-			<button
-			className="md:hidden p-2 rounded hover:bg-white/10 focus:outline-none"
-			onClick={() => setIsOpen(!isOpen)}
-			>
-			{isOpen ? <X size={28} /> : <Menu size={28} />}
-			</button>
-		</div>
-		{isOpen && (
-			<div className="md:hidden absolute top-16 left-0 w-full bg-black/90 flex flex-col items-center space-y-6 py-6">
-			<Link href="/" onClick={() => setIsOpen(false)} className="hover:text-gray-300">
-				部落格
-			</Link>
-			<Link href="/" onClick={() => setIsOpen(false)} className="hover:text-gray-300">
-				論壇
-			</Link>
-			</div>
-		)}
-	  </nav>
-    </nav>
-  );
-};*/
-
 import { motion } from "framer-motion";
+import { supabase } from "@/supabase-client";
+import { useState, useEffect } from "react";
+import type { User } from "@supabase/supabase-js"
+import { handleSignOut } from "@/lib/toolbox";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -64,6 +20,23 @@ const staggerContainer = {
 };
 
 export const Navbar = () => {
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser()
+      if (data?.user) setUser(data?.user ?? null)
+    }
+    fetchUser()
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+    setUser(session?.user ?? null)
+    })
+
+    return () => subscription.subscription.unsubscribe()
+  }, [])
+
+  
   return (
     <motion.nav
       className="navbar fixed top-0 right-0 left-0 flex items-center justify-around py-6 bg-black/60 backdrop-blur-md z-50 shadow-2xl shadow-black/60 h-16"
@@ -100,13 +73,20 @@ export const Navbar = () => {
         >
           <a className="relative cursor-pointer" href="/forum"> 論壇</a>
         </motion.li>
-        <motion.li
+        {user ? <motion.li
+          variants={fadeInUp}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => handleSignOut()}
+        >
+          <div className="relative cursor-pointer text-red-700"> 登出</div>
+        </motion.li> : <motion.li
           variants={fadeInUp}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
           <a className="relative cursor-pointer" href="/auth"> 登入</a>
-        </motion.li>
+        </motion.li> }
       </motion.ul>
     </motion.nav>
   );
