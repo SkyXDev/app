@@ -71,7 +71,7 @@ export const Navbar = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <a className="relative cursor-pointer" href="/forum"> 論壇</a>
+          <a className="relative cursor-pointer" href="/create"> 論壇</a>
         </motion.li>
         {user ? <motion.li
           variants={fadeInUp}

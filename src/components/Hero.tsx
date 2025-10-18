@@ -3,6 +3,9 @@
 import { Button } from "./ui/button";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { supabase } from "@/supabase-client";
+import type { User } from "@supabase/supabase-js"
+import { handleSignOut } from "@/lib/toolbox";
 
 export const Hero = () => {
   const videos = [
@@ -14,7 +17,21 @@ export const Hero = () => {
   
   const [currentVidIndex, setCurrentVidIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser()
+      if (data?.user) setUser(data?.user ?? null)
+    }
+    fetchUser()
 
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+    setUser(session?.user ?? null)
+    })
+
+    return () => subscription.subscription.unsubscribe()
+  }, [])
   const handleEnded = () => {
     setCurrentVidIndex((prev) => (prev + 1) % videos.length); 
   };
@@ -56,7 +73,7 @@ export const Hero = () => {
             <Link href="/auth" className="text-xl">登入</Link>
           </Button>
           <Button asChild variant="outline" className="w-22 h-12 flex justify-center items-center">
-            <Link href="/auth" className="text-xl">閱讀貼文</Link>
+            <Link href="/auth" className="text-xl">閱讀論壇</Link>
           </Button>
         </div>
       </div>
