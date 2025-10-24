@@ -43,7 +43,7 @@ const CreatePage = () => {
       alert(`Error creating post: ${error.message}`);
     } else {
       alert("Post created successfully!");
-      router.push("/"); // redirect back to home or posts list
+      router.push("/blog"); // redirect back to home or posts list
     }
   };
 
