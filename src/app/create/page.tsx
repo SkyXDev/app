@@ -23,6 +23,7 @@ const CreatePage = () => {
     if (!user) {
       alert("Please log in first.");
       setLoading(false);
+	  router.push("/auth");
       return;
     }
 
@@ -46,7 +47,7 @@ const CreatePage = () => {
     }
   };
 
-
+  
   return (
 	<div className="min-h-screen flex items-center justify-center bg-gray-900">
       <form
